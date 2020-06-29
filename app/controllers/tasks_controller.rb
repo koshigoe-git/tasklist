@@ -3,6 +3,11 @@ class TasksController < ApplicationController
   #require_user_logged_inメソッドはapplication_controller.rbに記載
   before_action :require_user_logged_in
   
+  #:require_user_logged_inのみだと、ログインさえすれば自分以外の誰の投稿したタスクでもみれてしまう状態なので、
+  #ログインユーザーが投稿したタスクだけみれるようにする
+  #ログインユーザーが自分以外のタスクを見ようとしたらsignup（ログインページ）に戻る
+  before_action :correct_user, only: [:show]
+  
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   
   def index
@@ -61,9 +66,17 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
   end
   
+  def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+      redirect_to root_url
+    end
+  end
+  
   # Strong Parameter
   def task_params
     params.require(:task).permit(:content, :status)
   end
+  
   
 end
