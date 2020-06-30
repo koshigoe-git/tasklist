@@ -6,9 +6,7 @@ class TasksController < ApplicationController
   #:require_user_logged_inのみだと、ログインさえすれば自分以外の誰の投稿したタスクでもみれてしまう状態なので、
   #ログインユーザーが投稿したタスクだけみれるようにする
   #ログインユーザーが自分以外のタスクを見ようとしたらsignup（ログインページ）に戻る
-  before_action :correct_user, only: [:show]
-  
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :correct_user, only: [:show, :edit]
   
   def index
     #現在のログインユーザーのタスクのみ全て表示
@@ -62,9 +60,6 @@ class TasksController < ApplicationController
   end
   
   private
-  def set_task
-    @task = Task.find(params[:id])
-  end
   
   def correct_user
     @task = current_user.tasks.find_by(id: params[:id])
