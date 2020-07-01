@@ -3,10 +3,10 @@ class TasksController < ApplicationController
   #require_user_logged_inメソッドはapplication_controller.rbに記載
   before_action :require_user_logged_in
   
-  #:require_user_logged_inのみだと、ログインさえすれば自分以外の誰の投稿したタスクでもみれてしまう状態なので、
+  #:require_user_logged_inのみだと、ログインさえすれば自分以外の誰の投稿したタスクでもみれてしまう状態
   #ログインユーザーが投稿したタスクだけみれるようにする
   #ログインユーザーが自分以外のタスクを見ようとしたらsignup（ログインページ）に戻る
-  before_action :correct_user, only: [:show, :edit]
+  before_action :correct_user, only: [:show, :edit, :update, :destroy]
   
   def index
     #現在のログインユーザーのタスクのみ全て表示
@@ -54,7 +54,6 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy
-    
     flash[:success] = 'Taskは正常に削除されました'
     redirect_to tasks_url
   end
@@ -72,6 +71,5 @@ class TasksController < ApplicationController
   def task_params
     params.require(:task).permit(:content, :status)
   end
-  
-  
+
 end
