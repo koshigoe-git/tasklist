@@ -40,9 +40,6 @@ class TasksController < ApplicationController
   end
 
   def update
-    #idから更新したいTaskモデルのレコードを検索
-    @task = Task.find(params[:id])
-    
     if @task.update(task_params)
       flash[:success] = "Taskは正常に更新されました"
       redirect_to root_url
